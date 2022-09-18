@@ -53,6 +53,7 @@ int deleteVector(void * content  ,struct vector * vec ){
     return index;
 
 }
+
 int deleteIndexVector(size_t index  ,struct vector * vec ){
     if(index < 0 || index >= vec->len|| vec -> len < 1 )
         return  -1 ;
@@ -64,13 +65,16 @@ int deleteIndexVector(size_t index  ,struct vector * vec ){
     return index;
 
 }
+
 void * deleteLastVector(struct vector * vec){
     deleteIndexVector(vec->len - 1 , vec ) ;
 
 }
+
 void * getIndexVector(size_t index , struct vector * vec){
     return vec->arr + vec->size * index  ;
 }
+
 void * getLastVector(struct vector * vec ){
     return getIndexVector(vec->len-1 , vec);
 }
@@ -82,10 +86,12 @@ void freeVector(struct vector * vec){
     vec->arr = NULL;
 
 }
+
 void resetVector(struct vector * vec){
     freeVector(vec);
     vec->len=0;
 }
+
 void forEach(void (*callback)(void * x), struct vector * vec){
     for(int i = 0 ; i<vec->len ;i++)
         callback(vec->arr + i * vec->size );

@@ -6,8 +6,8 @@
 #define IDSH_SHELLPRINTING_H
 
 #include <stdarg.h>
-#include "vector.h"
-#include "linkedList.h"
+#include "DataStructers/vector.h"
+#include "DataStructers/linkedList.h"
 #include <unistd.h>
 #include <termios.h>
 

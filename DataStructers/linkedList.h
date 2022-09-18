@@ -87,6 +87,7 @@ void * popBack(struct linkedList * ln){
     freeNode(toDel);
 
 }
+
 void forEachLinked(void (*function)(void * param),struct linkedList * ln){
     struct linkedNode * start = ln->head;
     while(start){

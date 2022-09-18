@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "shellprinting.h"
-#include "linkedList.h"
+#include "DataStructers/linkedList.h"
 
 #define true 1
 #define INT_MAX 2147483647
