@@ -7,8 +7,24 @@
 
 #include <stdarg.h>
 #include "vector.h"
+#include "linkedList.h"
 #include <unistd.h>
 #include <termios.h>
+
+#define BLINK 5
+#define BGWHITE 7
+#define BGRED 41
+#define BGGREEN 42
+#define BGYELLOW 43
+#define BGBLUE 44
+#define BGPURPLE 45
+#define BGCYAN 46
+#define BGGRAY 101
+#define BGGREEN2 102
+#define BGYELLOW2 103
+#define BGPRUPLE2 105
+#define BGCYAN2 106
+#define INVISABLE 8
 #define BLACK 30
 #define GREEN 32
 #define RED 31
@@ -18,11 +34,22 @@
 #define WHITE 37
 #define DEFAULTCOLOR 39
 
+
+
+
+
 typedef struct command {
     int color ;
     char * command ;
 
 } ;
+
+static u_int8_t currentBGColor = 42;
+u_int8_t getNextBG(){
+    currentBGColor = (currentBGColor+1)%6 + 41 ;
+    return  currentBGColor;
+}
+
 
 
 void changeColor(int color ) {
@@ -70,6 +97,7 @@ char *  input (void (* callbackPrint) () )
     struct  vector * beforeSpace = createVector(sizeof(char));
     struct vector * commands = createVector(sizeof(struct command));
     struct  command com ;
+    struct linkedList * rBracket = createLinkedList(sizeof(u_int8_t));
     com.command = "ls\0";
     com.color = GREEN ;
     addVector( &com,commands );
@@ -109,6 +137,8 @@ char *  input (void (* callbackPrint) () )
             if(beforeSpace > 0 )
                 addVector(&current,beforeSpace);
         }
+
+
        printf("%c",current);
        fflush(stdout);
        addVector(&current,vec);

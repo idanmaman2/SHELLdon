@@ -28,25 +28,13 @@ void print(void * param){
 
 
 int main() {
-    int value = 1;
-    struct linkedList * test = createLinkedList(sizeof(value));
-    pushFront(test,&value);
-    value++;
-    pushBack(test,&value);
-    value++;
-    pushBack(test,&value);
-    value++;
-    pushFront(test,&value);
-    forEachLinked(print,test);
-printf("part 2 \n ");
-    popBack(test);
-    popFront(test);
-    forEachLinked(print,test);
 
+    char * a = "idan\0";
+    for(int i=0 ;i < 251;i++) {
+        changeColor(i);
+        printf("%d is idan\n",i);
+    }
 
-
-
-    return 0;
    username= getenv("USER");
    homedir = getenv("HOME");
     while(true){
