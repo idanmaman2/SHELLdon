@@ -3,4 +3,4 @@ project(IDSH C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(IDSH main.c vector.h shellprinting.h stack.h)
+add_executable(IDSH main.c vector.h shellprinting.h stack.h linkedList.h)
