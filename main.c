@@ -2,38 +2,44 @@
 #include <stdlib.h>
 #include "shellprinting.h"
 #include "DataStructers/linkedList.h"
-#include "DataStructers/trie.h"
 
 #define true 1
 #define INT_MAX 2147483647
+char * username ;
+char * homedir ;
+void * printSchemeToscreen(){
+    changeColor(YELLOW);
+    printf("(%s)",username);
+    changeColor(PURPLE);
+    printf("@");
+    changeColor(GREEN);
+    printf("[%s]",homedir);
+    changeColor(RED);
+    printf(":>>");
+    changeColor(DEFAULTCOLOR);
 
-void print2(void * param,void * data , size_t len)
-{
-   printf("data %d ", *((int * )data));
+}
+
+void print(void * param){
+    int * pr = param ;
+    printf("%d\n",*pr);
     fflush(stdout);
-   for(size_t i=0; i< len ;i++){
-       printf("%c ",((char *)param)[i]);
-       fflush(stdout);
-   }
 }
 
 
 int main() {
 
-    int data = 3 ;
-    struct trie * tr = createTrie(sizeof(int));
-    printf("hi");
-    fflush(stdout);
-    addWord(tr,"idan",&data);
-    data=8;
-    printf("hi");
-    fflush(stdout);
-    addWord(tr,"iadn",&data);
-    printf("hi");
-    fflush(stdout);
-    forEachTrie(print2,tr);
-    printf("hi");
+   username= getenv("USER");
+   homedir = getenv("HOME");
+    while(true){
+    printSchemeToscreen();
+    char * a = input(printSchemeToscreen);
+    printf("%s\n",a);
+
+
+
+
+    }
 
     return 0;
-
 }

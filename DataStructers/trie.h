@@ -63,6 +63,16 @@ void addWord (struct trie * nd , char * word , void * data ){
     putDataInTrieNode(start,nd->size , data);
 }
 
+static void * searchForValueRec(struct trieNode * nd , char * word){
+    if(*word)
+        return searchForValueRec(nd->next[convertToIndex(*word)],word+1);
+    return nd->end;
+}
+void *  searchForvalue(struct trie * nd , char * word ){
+    return searchForValueRec(&nd->root,word);
+}
+
+
 static void forEachRec(void (*callback)(void * key , void * data , size_t keyLen),struct trieNode * node,struct vector * untilNow){
     char value ;
     addVector(&value,untilNow);
