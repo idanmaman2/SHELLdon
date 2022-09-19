@@ -2,52 +2,38 @@
 #include <stdlib.h>
 #include "shellprinting.h"
 #include "DataStructers/linkedList.h"
+#include "DataStructers/trie.h"
 
 #define true 1
 #define INT_MAX 2147483647
-char * username ;
-char * homedir ;
-void * printSchemeToscreen(){
-    changeColor(YELLOW);
-    printf("(%s)",username);
-    changeColor(PURPLE);
-    printf("@");
-    changeColor(GREEN);
-    printf("[%s]",homedir);
-    changeColor(RED);
-    printf(":>>");
-    changeColor(DEFAULTCOLOR);
 
-}
-
-void print(void * param){
-    int * pr = param ;
-    printf("%d\n",*pr);
+void print2(void * param,void * data , size_t len)
+{
+   printf("data %d ", *((int * )data));
     fflush(stdout);
+   for(size_t i=0; i< len ;i++){
+       printf("%c ",((char *)param)[i]);
+       fflush(stdout);
+   }
 }
 
 
 int main() {
 
-    char * a = "idan\0";
-    for(int i=0 ;i < 251;i++) {
-        changeColor(i);
-        printf("%d is idan\n",i);
-    }
-
-   username= getenv("USER");
-   homedir = getenv("HOME");
-    while(true){
-    printSchemeToscreen();
-    char command[2048] ;
-    char * a = input(printSchemeToscreen);
-    printf(a);
-
-    break ;
-
-
-
-    }
+    int data = 3 ;
+    struct trie * tr = createTrie(sizeof(int));
+    printf("hi");
+    fflush(stdout);
+    addWord(tr,"idan",&data);
+    data=8;
+    printf("hi");
+    fflush(stdout);
+    addWord(tr,"iadn",&data);
+    printf("hi");
+    fflush(stdout);
+    forEachTrie(print2,tr);
+    printf("hi");
 
     return 0;
+
 }

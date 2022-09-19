@@ -41,19 +41,6 @@ int searchVector(void *  content , struct vector* vec){
 
 }
 
-int deleteVector(void * content  ,struct vector * vec ){
-    size_t index= searchVector(content,vec);
-    if(index == -1 || vec -> len < 1 )
-        return  -1 ;
-    void * arrNew = malloc(vec->size * --vec->len);
-    memcpy(arrNew , vec->arr , (index)* vec->size   );
-    memcpy(vec->arr +(index+1)*vec->size    , arrNew+ (index) * vec->size , (vec->len-index)*vec-> size  );
-    free(vec->arr);
-    vec->arr=arrNew ;
-    return index;
-
-}
-
 int deleteIndexVector(size_t index  ,struct vector * vec ){
     if(index < 0 || index >= vec->len|| vec -> len < 1 )
         return  -1 ;
@@ -66,9 +53,17 @@ int deleteIndexVector(size_t index  ,struct vector * vec ){
 
 }
 
+int deleteVector(void * content  ,struct vector * vec ){
+    return deleteIndexVector(searchVector(content,vec),vec);
+}
+
 void * deleteLastVector(struct vector * vec){
     deleteIndexVector(vec->len - 1 , vec ) ;
 
+}
+
+void * setIndexVector(size_t index , void * data , struct vector * vec){
+    memcpy(vec->arr + index * vec->size , data,vec->size);
 }
 
 void * getIndexVector(size_t index , struct vector * vec){
