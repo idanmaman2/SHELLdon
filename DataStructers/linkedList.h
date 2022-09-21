@@ -45,8 +45,7 @@ void freeNode(struct linkedNode * node){
 }
 
 struct linkedNode * createNode(void * data,int size){
-    struct linkedNode  * newHead = (struct linkedNode * )malloc(sizeof(struct linkedNode));
-    memset(newHead,0,sizeof(struct linkedNode));
+    struct linkedNode  * newHead = (struct linkedNode * )calloc(sizeof(struct linkedNode));
     newHead->content=malloc(size);
     memcpy(newHead->content,data,size);
     return newHead;
@@ -54,9 +53,8 @@ struct linkedNode * createNode(void * data,int size){
 }
 
 struct linkedList *  createLinkedList(unsigned int size ){
-    struct linkedList *  stk = (struct linkedList * )malloc(sizeof (struct linkedList));
+    struct linkedList *  stk = (struct linkedList * )calloc(sizeof (struct linkedList));
     stk->it = malloc(sizeof(struct iter));
-    memset(stk,0,sizeof(struct linkedList));
     stk->it->current = stk->head;
     stk->it->next = iterNextLinkedList ;
     stk->it->hasNext = iterHasNextLinkedList ;

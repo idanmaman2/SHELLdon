@@ -41,8 +41,7 @@ void iterResetVec(int * current,struct vector * ln){
 
 //functions
 struct vector * createVector(int size ){
-    struct vector * vec = (struct vector * )malloc(sizeof(struct vector));
-    memset(vec , 0 , sizeof(struct vector));
+    struct vector * vec = (struct vector * )calloc(sizeof(struct vector));
     if(size <=0 ){
         fprintf(stderr , "cant create vector of size 0");
         exit(-1);
