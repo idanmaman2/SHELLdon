@@ -17,7 +17,7 @@ typedef  struct linkedNode {
 };
 
 typedef struct linkedList {
-    struct iter * it ;
+    struct iter it ;
     size_t len ;
     unsigned int size  ;
     struct linkedNode * head  ;
@@ -45,7 +45,7 @@ void freeNode(struct linkedNode * node){
 }
 
 struct linkedNode * createNode(void * data,int size){
-    struct linkedNode  * newHead = (struct linkedNode * )calloc(sizeof(struct linkedNode));
+    struct linkedNode  * newHead = (struct linkedNode * )calloc(1,sizeof(struct linkedNode));
     newHead->content=malloc(size);
     memcpy(newHead->content,data,size);
     return newHead;
@@ -53,12 +53,11 @@ struct linkedNode * createNode(void * data,int size){
 }
 
 struct linkedList *  createLinkedList(unsigned int size ){
-    struct linkedList *  stk = (struct linkedList * )calloc(sizeof (struct linkedList));
-    stk->it = malloc(sizeof(struct iter));
-    stk->it->current = stk->head;
-    stk->it->next = iterNextLinkedList ;
-    stk->it->hasNext = iterHasNextLinkedList ;
-    stk->it->reset =iterResetLinkedList ;
+    struct linkedList *  stk = (struct linkedList * )calloc(1,sizeof (struct linkedList));
+    stk->it.current = stk->head;
+    stk->it.next = iterNextLinkedList ;
+    stk->it.hasNext = iterHasNextLinkedList ;
+    stk->it.reset =iterResetLinkedList ;
     stk->size = size ;
     return stk ;
 }
@@ -70,7 +69,7 @@ void pushFront(struct linkedList * ln ,void * data){
         ln->head->before=newHead;
     else{
         ln->tail=newHead;
-        ln->it->current=newHead;
+        ln->it.current=newHead;
     }
     ln->head=newHead;
 }
@@ -80,7 +79,7 @@ void pushBack(struct linkedList * ln , void * data ){
     if(!ln->tail){
         ln->head=newHead;
         ln->tail=newHead;
-        ln->it->current = ln->head;
+        ln->it.current = ln->head;
         return ;
     }
     newHead->before = ln->tail ;
@@ -111,14 +110,6 @@ void * popBack(struct linkedList * ln){
 
 }
 
-void forEachLinked(void (*function)(void * param),struct linkedList * ln){
-    struct linkedNode * start = ln->head;
-    while(start){
-        function(start->content);
-        start=start->next;
-    }
-
-}
 
 
 #endif //IDSH_STACK_H

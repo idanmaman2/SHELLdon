@@ -11,15 +11,18 @@ struct iter {
     void * current ;
 };
 
-void forEachIter(void (*func )(void * param , void * arg) , struct iter * * it ,void  * arg){
-    (*it)->reset((*it)->current,it);
-    while((*it)->hasNext((*it)->current,it)){
-        func((*it)->next((*it)->current,it),arg);
+void forEachIter(void (*func )(void * param , void * arg) , struct iter *  it ,void  * arg){
+    it->reset(it->current,it);
+    while(it->hasNext(it->current,it)){
+        func(it->next(it->current,it),arg);
     }
 }
 void convertToVectorIter(struct iter * it , void * ds ){}
+
 void mapIter(void (*func ) , struct iter * it , void * ds ){}
+
 void filterIter(int (*func ) , struct iter * it , void * ds  ){}
+
 void reduceIter(int (*func ) , struct iter * it , void * ds ){}
 
 

@@ -11,7 +11,7 @@
 
 typedef  struct vector
 {
-    struct iter * it ;
+    struct iter  it ;
     void  * arr;
     int size ;
     int len;
@@ -37,22 +37,19 @@ void iterResetVec(int * current,struct vector * ln){
 }
 
 
-
-
 //functions
 struct vector * createVector(int size ){
-    struct vector * vec = (struct vector * )calloc(sizeof(struct vector));
+    struct vector * vec = (struct vector * )calloc(1,sizeof(struct vector));
     if(size <=0 ){
         fprintf(stderr , "cant create vector of size 0");
         exit(-1);
     }
     vec->size=size;
-    vec->it= malloc(sizeof(struct iter));
-    vec->it->current = malloc(sizeof(int));
-    *((int *)  vec->it->current)=0 ;
-    vec->it->next=iterNextVec;
-    vec->it->reset=iterResetVec;
-    vec->it->hasNext=iterHasNextVec;
+    vec->it.current = malloc(sizeof(int));
+    *((int *)  vec->it.current)=0 ;
+    vec->it.next=iterNextVec;
+    vec->it.reset=iterResetVec;
+    vec->it.hasNext=iterHasNextVec;
     return  vec ;
 }
 
@@ -96,7 +93,6 @@ void * setIndexVector(size_t index , void * data , struct vector * vec){
 }
 
 
-
 void * getLastVector(struct vector * vec ){
     return getIndexVector(vec->len-1 , vec);
 }
@@ -114,21 +110,6 @@ void resetVector(struct vector * vec){
     vec->len=0;
 }
 
-void forEach(void (*callback)(void * x), struct vector * vec){
-    for(int i = 0 ; i<vec->len ;i++)
-        callback(vec->arr + i * vec->size );
-}
-
-void fornEach(void (*callback)(void * x), size_t len , struct vector * vec){
-    if(len > vec->len){
-        fprintf(stderr ,"cant loop , segmation error");
-        exit(-1);
-    }
-
-    for(int i = 0 ; i<len ;i++)
-        callback(vec->arr + i * vec->size );
-}
-
 void sortVector(struct vector * vec , int (* compare )(const void * a , const void * b )){
     qsort(vec->arr,vec->len , vec->size  , compare );
 }
@@ -140,6 +121,7 @@ struct vector * cloneVector (struct vector * vec){
     vecClone->len=vec->len;
     vecClone->size=vec->size;
 }
+
 void addNVector(void * array , size_t len , struct vector * vec){
     vec->len+=len;
     vec->arr = realloc( vec->arr, vec->size * vec->len);

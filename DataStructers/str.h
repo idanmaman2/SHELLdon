@@ -8,7 +8,7 @@
 #include "vector.h"
 char end = 0 ;
 struct str {
-    struct iter * it ;
+    struct iter  it ;
     struct vector * vec ;
 } ;
 
@@ -34,12 +34,11 @@ struct str *  createStr(){
     struct str * tmp = malloc(sizeof(struct str));
     tmp->vec= createVector(sizeof(char));
     addVector(&end,tmp->vec);
-    tmp->it= malloc(sizeof(struct iter));
-    tmp->it->current = malloc(sizeof(int));
-    *((int *)  tmp->it->current)=0 ;
-    tmp->it->next=iterNextStr;
-    tmp->it->reset=iterResetStr;
-    tmp->it->hasNext=iterHasNextStr;
+    tmp->it.current = malloc(sizeof(int));
+    *((int *)  tmp->it.current)=0 ;
+    tmp->it.next=iterNextStr;
+    tmp->it.reset=iterResetStr;
+    tmp->it.hasNext=iterHasNextStr;
     return tmp ;
 }
 
