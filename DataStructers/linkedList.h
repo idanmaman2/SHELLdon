@@ -8,6 +8,7 @@
 #include <malloc.h>
 #include <memory.h>
 #include <stdlib.h>
+#include "iter.h"
 
 typedef  struct linkedNode {
     struct  linkedNode * next ;
@@ -16,11 +17,27 @@ typedef  struct linkedNode {
 };
 
 typedef struct linkedList {
+    struct iter * it ;
     size_t len ;
     unsigned int size  ;
     struct linkedNode * head  ;
     struct linkedNode * tail ;
 };
+//iter
+void * iterNextLinkedList( struct linkedNode  * current,struct linkedList * ln){
+    current=current->next ;
+    return current->next;
+}
+
+int iterHasNextLinkedList(struct  linkedNode * current,struct linkedList * ln){
+    return current && current->next ;
+}
+
+void iterResetLinkedList(struct linked * current,struct linkedList * ln){
+    current = ln->head ;
+}
+
+//functions
 
 void freeNode(struct linkedNode * node){
     free(node->content);
@@ -38,7 +55,12 @@ struct linkedNode * createNode(void * data,int size){
 
 struct linkedList *  createLinkedList(unsigned int size ){
     struct linkedList *  stk = (struct linkedList * )malloc(sizeof (struct linkedList));
+    stk->it = malloc(sizeof(struct iter));
     memset(stk,0,sizeof(struct linkedList));
+    stk->it->current = stk->head;
+    stk->it->next = iterNextLinkedList ;
+    stk->it->hasNext = iterHasNextLinkedList ;
+    stk->it->reset =iterResetLinkedList ;
     stk->size = size ;
     return stk ;
 }
@@ -48,8 +70,10 @@ void pushFront(struct linkedList * ln ,void * data){
     newHead->next=ln->head;
     if(ln->head)
         ln->head->before=newHead;
-    else
+    else{
         ln->tail=newHead;
+        ln->it->current=newHead;
+    }
     ln->head=newHead;
 }
 
@@ -58,6 +82,7 @@ void pushBack(struct linkedList * ln , void * data ){
     if(!ln->tail){
         ln->head=newHead;
         ln->tail=newHead;
+        ln->it->current = ln->head;
         return ;
     }
     newHead->before = ln->tail ;

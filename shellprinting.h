@@ -106,7 +106,7 @@ char *  input (void (* callbackPrint) () )
     com2.color = RED ;
     addVector( &com2,commands );
     do
-   {
+    {
         current= getch();
         if (current == 127  ){
             if(vec->len > 0 ){
@@ -139,9 +139,9 @@ char *  input (void (* callbackPrint) () )
         }
 
 
-       printf("%c",current);
-       fflush(stdout);
-       addVector(&current,vec);
+        printf("%c",current);
+        fflush(stdout);
+        addVector(&current,vec);
 
 
     } while(current != '\n');

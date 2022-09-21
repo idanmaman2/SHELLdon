@@ -5,17 +5,41 @@
 #include <memory.h>
 #include <assert.h>
 #include <stdlib.h>
-
+#include "iter.h"
 #ifndef UNTITLED1_VECTOR_H
 #define UNTITLED1_VECTOR_H
 
 typedef  struct vector
 {
+    struct iter * it ;
     void  * arr;
     int size ;
     int len;
 };
 
+//iter
+
+void * getIndexVector(size_t index , struct vector * vec){
+    return vec->arr + vec->size * index  ;
+}
+
+void * iterNextVec( int  * current,struct vector * ln){
+
+    return getIndexVector((*current)++ , ln);
+}
+
+int iterHasNextVec(int  * current,struct vector * ln){
+    return *current  < ln->len;
+}
+
+void iterResetVec(struct linked * current,struct vector * ln){
+    current = 0 ;
+}
+
+
+
+
+//functions
 struct vector * createVector(int size ){
     struct vector * vec = (struct vector * )malloc(sizeof(struct vector));
     memset(vec , 0 , sizeof(struct vector));
@@ -24,6 +48,13 @@ struct vector * createVector(int size ){
         exit(-1);
     }
     vec->size=size;
+    vec->it= malloc(sizeof(struct iter));
+    vec->it->current = malloc(sizeof(int));
+    int * curi = vec->it->current ;
+    *curi = 0 ;
+    vec->it->next=iterNextVec;
+    vec->it->reset=iterResetVec;
+    vec->it->hasNext=iterHasNextVec;
     return  vec ;
 }
 
@@ -66,9 +97,7 @@ void * setIndexVector(size_t index , void * data , struct vector * vec){
     memcpy(vec->arr + index * vec->size , data,vec->size);
 }
 
-void * getIndexVector(size_t index , struct vector * vec){
-    return vec->arr + vec->size * index  ;
-}
+
 
 void * getLastVector(struct vector * vec ){
     return getIndexVector(vec->len-1 , vec);
@@ -105,5 +134,21 @@ void fornEach(void (*callback)(void * x), size_t len , struct vector * vec){
 void sortVector(struct vector * vec , int (* compare )(const void * a , const void * b )){
     qsort(vec->arr,vec->len , vec->size  , compare );
 }
+
+struct vector * cloneVector (struct vector * vec){
+    struct vector * vecClone = (struct vector * )malloc(sizeof(struct vector));
+    vecClone->arr= malloc(vec->len*vec->size);
+    memcpy(vecClone->arr,vec->arr,vec->size*vec->len);
+    vecClone->len=vec->len;
+    vecClone->size=vec->size;
+}
+void addNVector(void * array , size_t len , struct vector * vec){
+    vec->len+=len;
+    vec->arr = realloc( vec->arr, vec->size * vec->len);
+    memcpy( vec->arr + (vec->size ) * (vec -> len - len ) ,array , vec-> size * len  );
+}
+
+
+
 
 #endif //UNTITLED1_VECTOR_H

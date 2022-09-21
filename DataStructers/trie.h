@@ -9,6 +9,11 @@
 #include <memory.h>
 #include "vector.h"
 
+
+const char chars[] = {'1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','\\',']','`','^','_','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~'} ;
+#define charsLen 78
+
+
 struct trieNode{
     void * end ;
     struct trieNode * next[26];
@@ -24,6 +29,7 @@ struct trie{
 
 
 
+//functions
 struct linkedNode * createTrieNode(void * data,int size){
     struct trieNode  * newHead = (struct trieNode * )malloc(sizeof(struct trieNode));
     memset(newHead,0,sizeof(struct trieNode));
@@ -56,15 +62,18 @@ void addWord (struct trie * nd , char * word , void * data ){
     int wordLen = strlen(word);
     struct trieNode * start = &nd->root;
     for(int i=0 ;i<wordLen;i++){
-        if(!start->next[convertToIndex(word[i])])
-            start->next[convertToIndex(word[i])] = malloc(sizeof(struct trieNode));
+        int index =convertToIndex(word[i]);
+        if(!start->next[index])
+            start->next[index] = malloc(sizeof(struct trieNode));
         start = start->next[convertToIndex(word[i])];
     }
     putDataInTrieNode(start,nd->size , data);
 }
 
 static void * searchForValueRec(struct trieNode * nd , char * word){
-    if(*word)
+    if (word && !nd)
+        return NULL;
+    if( *word)
         return searchForValueRec(nd->next[convertToIndex(*word)],word+1);
     return nd->end;
 }
