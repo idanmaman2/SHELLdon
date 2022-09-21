@@ -14,14 +14,32 @@ struct str {
 
 //iter
 
+void * iterNextStr( int  * current,struct str * ln){
+
+    return getIndexVector((*current)++ , ln->vec);
+}
+
+int iterHasNextStr(int  * current,struct str * ln){
+    return *current  < ln->vec->len-1;
+}
+
+void iterResetStr(int * current,struct str * ln){
+    *current = 0 ;
+}
+
+
 //functions
 
 struct str *  createStr(){
     struct str * tmp = malloc(sizeof(struct str));
     tmp->vec= createVector(sizeof(char));
     addVector(&end,tmp->vec);
-    tmp->it = tmp->vec->it ;
-
+    tmp->it= malloc(sizeof(struct iter));
+    tmp->it->current = malloc(sizeof(int));
+    *((int *)  tmp->it->current)=0 ;
+    tmp->it->next=iterNextStr;
+    tmp->it->reset=iterResetStr;
+    tmp->it->hasNext=iterHasNextStr;
     return tmp ;
 }
 

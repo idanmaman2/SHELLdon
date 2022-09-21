@@ -21,9 +21,13 @@ void * printSchemeToscreen(){
 
 }
 
-void printStr(void * a){
-    struct str * st2 =a ;
+void printStr( struct str * st2 , void * ){
     printf("cool : %s \n",st2->vec->arr);
+    fflush(stdout);
+}
+
+void printChar( char * ch ){
+    printf("cool : %c \n",*ch);
     fflush(stdout);
 }
 
@@ -37,7 +41,10 @@ void printAll(void * key , void  * data, size_t len ){
 
 int main() {
 
-
+    struct str * st =createStr();
+    addChrArrStr("cool bruhhh",st);
+    addChrStr("coooooollll",st);
+    forEachIter(printChar , st ,NULL);
 
 
     return 0;

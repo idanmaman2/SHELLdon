@@ -32,8 +32,8 @@ int iterHasNextVec(int  * current,struct vector * ln){
     return *current  < ln->len;
 }
 
-void iterResetVec(struct linked * current,struct vector * ln){
-    current = 0 ;
+void iterResetVec(int * current,struct vector * ln){
+    *current = 0 ;
 }
 
 
@@ -50,8 +50,7 @@ struct vector * createVector(int size ){
     vec->size=size;
     vec->it= malloc(sizeof(struct iter));
     vec->it->current = malloc(sizeof(int));
-    int * curi = vec->it->current ;
-    *curi = 0 ;
+    *((int *)  vec->it->current)=0 ;
     vec->it->next=iterNextVec;
     vec->it->reset=iterResetVec;
     vec->it->hasNext=iterHasNextVec;
