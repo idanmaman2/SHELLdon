@@ -4,7 +4,6 @@
 
 #ifndef IDSH_SHELLCORE_H
 #define IDSH_SHELLCORE_H
-#define command_t short
 #include <dirent.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -13,18 +12,11 @@
 #include "DataStructers/vector.h"
 #include "DataStructers/trie.h"
 #include "DataStructers/str.h"
+#include "shellprinting.h"
+#include "shellCore.h"
 
-#define system 1
-#define intial 0
-#define color_t int
-struct command_shell {
-    struct str * basePath ;
-    struct str * name ;
-    command_t type ;
-    color_t  colorShowHead ;
-    color_t colorShowTail ;
-    color_t def ;
-} ;
+
+
 
 int isRunAble(char * path ){
     struct stat st ;

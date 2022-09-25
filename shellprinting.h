@@ -8,7 +8,9 @@
 #include <stdarg.h>
 #include "DataStructers/vector.h"
 #include "DataStructers/linkedList.h"
+#include "DataStructers/trie.h"
 #include <unistd.h>
+
 #include <termios.h>
 #define BLINK 5
 #define BGWHITE 7
@@ -31,13 +33,24 @@
 #define  PURPLE 35
 #define CYAN 36
 #define WHITE 37
+#define system 1
+#define intial 0
+#define color_t int
+#define command_t short
 #define DEFAULTCOLOR 39
 typedef struct command {
     int color ;
     char * command ;
 
 } ;
-
+struct command_shell {
+    struct str * basePath ;
+    struct str * name ;
+    command_t type ;
+    color_t  colorShowHead ;
+    color_t colorShowTail ;
+    color_t def ;
+} ;
 static u_int8_t currentBGColor = 42;
 u_int8_t getNextBG(){
     currentBGColor = (currentBGColor+1)%6 + 41 ;
@@ -77,7 +90,7 @@ void printnf(size_t n , char * string , int colorC){
     fflush(stdout);
 }
 
-char *  input (void (* callbackPrint) () )
+char *  input (void (* callbackPrint) () , struct trie * tr )
 {
     struct vector * vec = createVector(sizeof(char));
     char current;
@@ -107,13 +120,9 @@ char *  input (void (* callbackPrint) () )
         if(current == ' ' && beforeSpace->len > 0 ){
             int  color  = DEFAULTCOLOR ;
             addVector(&end,beforeSpace);
-            for(size_t i =0 ; i<commands->len;i++){
-                struct command * com =  (struct command *  )getIndexVector(i,commands);
-                if(!strcmp(beforeSpace->arr,com->command) ){
-                    color = com->color ;
-                    break ;
-                }
-
+            struct command_shell * com = searchForvalue(tr,beforeSpace);
+            if(com != NULL){
+              color = com->colorShowHead;
             }
             deleteLastVector(beforeSpace);
             forEachIter(clean,beforeSpace,NULL);

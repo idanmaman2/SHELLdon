@@ -40,19 +40,39 @@ void printAll(void * key , void  * data, size_t len ){
    }
 }
 
-void isE(struct command_shell * c , int * i ){
-
-
+void addToTrie(struct command_shell * c , struct trie * t ){
+    addWord(t,c->name->vec->arr,c);
 }
 
+void prt(char * key , void * x, int size){
+    for(int i=0;i<size;i++){
+        printf("%c",key[i]);
+    }
+}
+
+
 int main() {
+
+
+
+
   homedir = getenv("HOME");
   username= getenv("USER");
   int i =0 ;
   printAllCommamnds(printPath);
-  while(true ){
+
+    int x = 3;
+    struct trie * tr = createTrie(sizeof(struct command_shell));
+    forEachIter(addToTrie,allCommands(),tr);
+    forEachTrie(prt,tr);
+
+
+
+
+
+    while(true ){
       printSchemeToscreen();
-      struct str  * input2 = createStrChar(input(printSchemeToscreen));
+      struct str  * input2 = createStrChar(input(printSchemeToscreen,tr));
       struct vector * sp = split(input2,' ');
       char * * arr = malloc(sp->len * sizeof(char * )+1);
       arr[sp->len] = NULL ;
