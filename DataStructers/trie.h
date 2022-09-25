@@ -5,7 +5,7 @@
 #ifndef IDSH_TRIE_H
 #define IDSH_TRIE_H
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <memory.h>
 #include "vector.h"
 

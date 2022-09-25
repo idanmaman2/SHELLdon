@@ -34,20 +34,40 @@ void printChar( char * ch ){
 
 void printAll(void * key , void  * data, size_t len ){
    struct command_shell * tmp = data;
-   printf("\ntype : %d color : %d , basePath: %s \n" ,tmp->type ,tmp->colorShow , ((char * ) tmp->basePath) );
+   printf("\ntype : %d color : %d , basePath: %s \n" ,tmp->type ,tmp->colorShowHead , ((char * ) tmp->basePath) );
    for(size_t i =0 ; i<len ;i++){
        printf(" %c ",((char *)key)[i]);
    }
 }
 
-int main() {
+void isE(struct command_shell * c , int * i ){
 
-    struct str * st =createStr();
-    addChrArrStr("cool bruhhh",st);
-    addChrStr("coooooollll",st);
-    forEachIter(printChar , st ,NULL);
-    forEachIter(printChar , st ,NULL);
-    forEachIter(printChar , st ,NULL);
-    printf(st->vec->arr);
+
+}
+
+int main() {
+  homedir = getenv("HOME");
+  username= getenv("USER");
+  int i =0 ;
+  printAllCommamnds(printPath);
+  while(true ){
+      printSchemeToscreen();
+      struct str  * input2 = createStrChar(input(printSchemeToscreen));
+      struct vector * sp = split(input2,' ');
+      char * * arr = malloc(sp->len * sizeof(char * )+1);
+      arr[sp->len] = NULL ;
+      struct str * com = sp->arr ;
+      struct command_shell * cm = searchForCommand(com->vec->arr);
+      struct str * full = clone(cm->basePath);
+      catStr(full, cm->name);
+      arr[0] = full->vec->arr ;
+      for(size_t i = 1 ; i<sp->len ; i++ ){
+          struct str * arg = sp->arr + sp->size * i ;
+          arr[i] = arg->vec->arr;
+      }
+      justDoIt(full->vec->arr , arr);
+  }
+
+
     return 0;
 }

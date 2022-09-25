@@ -5,7 +5,7 @@
 #ifndef IDSH_STACK_H
 #define IDSH_STACK_H
 #include <unistd.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <memory.h>
 #include <stdlib.h>
 #include "iter.h"
@@ -25,16 +25,17 @@ typedef struct linkedList {
 };
 //iter
 void * iterNextLinkedList( struct linkedNode  * current,struct linkedList * ln){
-    current=current->next ;
-    return current->next;
+    struct linkedNode * res = current ;
+    ln->it.current=current->next ;
+    return res->content;
 }
 
 int iterHasNextLinkedList(struct  linkedNode * current,struct linkedList * ln){
-    return current && current->next ;
+    return   ln->it.current;
 }
 
 void iterResetLinkedList(struct linked * current,struct linkedList * ln){
-    current = ln->head ;
+    ln->it.current = ln->head ;
 }
 
 //functions

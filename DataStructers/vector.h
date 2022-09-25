@@ -1,7 +1,7 @@
 //
 // Created by idang on 9/14/22.
 //
-#include<malloc.h>
+#include<stdlib.h>
 #include <memory.h>
 #include <assert.h>
 #include <stdlib.h>

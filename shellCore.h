@@ -18,16 +18,19 @@
 #define intial 0
 #define color_t int
 struct command_shell {
-   void * basePath ;
+    struct str * basePath ;
+    struct str * name ;
     command_t type ;
-    color_t  colorShow ;
+    color_t  colorShowHead ;
+    color_t colorShowTail ;
+    color_t def ;
 } ;
 
 int isRunAble(char * path ){
     struct stat st ;
     lstat(path,&st);
     stat(path, &st) == 0 &&
-            st.st_mode & S_IXUSR && S_ISREG(st.st_mode);
+    st.st_mode & S_IXUSR && S_ISREG(st.st_mode);
 
 }
 
@@ -62,75 +65,108 @@ char * getFullPath(char * path,char * command ){
 
 }
 
-void allCommandsP(char * path ,struct vector * out ){
-    struct vector * vec = createVector(sizeof(char));
-    addNVector(path, strlen(path),vec);
-    if(*((char *) getLastVector(vec)) != '/'){
-        char value = '/';
-        addVector(&value , vec);
-    }
-    char value=0;
-    addVector(&value,vec);
+void allCommandsP(struct str  * path ,struct vector * out ){
+    if(getLastStr(path) != '/')
+        addChrStr('/' , path);
     struct dirent *d;
-    DIR *dh = opendir(vec->arr);
+    DIR *dh = opendir(path->vec->arr);
     if(!dh)
         return ;
-    char * fullPath ;
     while ((d = readdir(dh)) != NULL)
     {
-        printf("cool");
-        if (d->d_name[0] != '.' && isRunAble(fullPath)){
-            printf("cool %s \n ",d->d_name);
-            fflush(stdout);
-            struct vector * vec2 = createVector(sizeof(char));
-            addNVector(d->d_name,strlen(d->d_name)+1,vec2);
-            addVector(&end,vec2);
-            addVector(vec2,out);
+        struct str * fullPath = clone(path);
+        addChrArrStr(d->d_name,fullPath);
+        if (d->d_name[0] != '.' && isRunAble(fullPath->vec->arr)){
+            struct command_shell * com = malloc(sizeof(struct command_shell));
+            com->basePath = clone(path);
+            com->name= createStrChar(d->d_name);
+            com->colorShowHead = BGBLUE ;
+            com->colorShowTail =BGPURPLE ;
+            com->def = BGYELLOW ;
+            com->type = system;
+            addVector(com,out);
         }
     }
-    printf("cool path env is %s ",path);
-    fflush(stdout);
 }
 
 struct vector * getPath(){
-
-    struct vector * res = createVector(sizeof(struct vector));
-    char *  PATH= getenv("PATH");
-
-    struct vector * vecPATH = createVector(sizeof(char));
-    addNVector(PATH, strlen(PATH),vecPATH);
-
-    char * token = strtok(vecPATH->arr,":\0");
-    while(token){
-        struct vector * cr = createVector(sizeof(char));
-        addNVector(token , strlen(token),cr);
-        addVector(&end,cr);
-        addVector(cr,res);
-        token=strtok(NULL,":\0");
-    }
-    return res ;
+    struct str * st  = createStrChar(getenv("PATH"));
+    void * sp = split(st,':');
+    freeStr(st);
+    return sp ;
 }
 
-void printPath(void * data){
-    struct vector * dataV = data;
-    printf("path : %s\n",((char * ) dataV->arr));
+void printPath(void * data , int * arg ){
+    (*arg)++;
+    struct command_shell * dataV = data;
+    changeColor(dataV->def);
+    printf("%d . path : ",*arg) ;
+    changeColor(dataV->colorShowHead);
+    printf(dataV->name->vec->arr );
+    changeColor(dataV->def);
+    printf(" name :  ") ;
+    changeColor(dataV->colorShowTail);
+    printf(dataV->basePath->vec->arr);
+    changeColor(DEFAULTCOLOR);
+    printf("\n");
 }
 
-void allCommands( ){
+struct vector *  allCommands(  ){
 
-    struct vecotr * out = createVector(sizeof(struct vector));
+    struct vecotr * out = createVector(sizeof(struct command_shell));
     struct vector * path = getPath();
     for(size_t i=0;i<path->len;i++){
-        struct vector * dataV = getIndexVector(i,path);
-        allCommandsP(dataV->arr,out);
+        allCommandsP(getIndexVector(i,path),out);
     }
-
-    forEachIter(printPath,out,NULL);
-
-
-
-
+    return out ;
 
 }
+void printAllCommamnds(void (* callBack )(void * data , void  * args )){
+    int arg =0 ;
+    forEachIter(callBack,allCommands(),&arg );
+}
+struct command_shell * searchForCommand(char * name ){
+    struct vector * PATH = getPath();
+    for(size_t i=0;i<PATH->len;i++){
+        struct str * path = getIndexVector(i,PATH);
+        if(getLastStr(path) != '/')
+            addChrStr('/' , path);
+        struct dirent *d;
+        DIR *dh = opendir(path->vec->arr);
+        if(!dh)
+            continue;
+        while ((d = readdir(dh)) != NULL)
+        {
+            struct str * fullPath = clone(path);
+            addChrArrStr(d->d_name,fullPath);
+            if (d->d_name[0] != '.' && isRunAble(fullPath->vec->arr)&& !strcmp(d->d_name,name)){
+                struct command_shell * com = malloc(sizeof(struct command_shell));
+                com->basePath = clone(path);
+                com->name= createStrChar(d->d_name);
+                com->colorShowHead = BGBLUE ;
+                com->colorShowTail =BGPURPLE ;
+                com->def = BGYELLOW ;
+                com->type = system;
+                return com ;
+            }
+        }
+    }
+    return NULL;
+}
+
+
+void justDoIt(char * path  , char ** args ){
+    int status ;
+    if( fork()){
+        wait(&status);
+    }
+    else{
+        changeColor(CYAN);
+        execv(path,args);
+        fflush(stdout);
+        changeColor(DEFAULTCOLOR);
+    }
+}
+
 
 #endif //IDSH_SHELLCORE_H

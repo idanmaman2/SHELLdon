@@ -31,6 +31,9 @@ void iterResetStr(int * current,struct str * ln){
 
 //functions
 
+
+
+
 struct str *  createStr(){
     struct str * tmp = malloc(sizeof(struct str));
     tmp->vec= createVector(sizeof(char));
@@ -43,12 +46,10 @@ struct str *  createStr(){
     return tmp ;
 }
 
-struct str * clone(struct str *  st){
-    struct str * jon = malloc(sizeof(struct str ));
-    jon->vec = cloneVector(st->vec);
-    return jon;
-}
 
+char getLastStr(struct  str * st){
+    return *((char * ) getIndexVector(st->vec->len-2 , st->vec));
+}
 void addChrStr(char con , struct str *  st ){
     addVector(&end , st->vec);
     setIndexVector(st->vec->len-2 ,&con , st->vec );
@@ -65,7 +66,12 @@ void addChrArrStr(char *  con , struct str *  st ){
 
 
 }
+struct str * createStrChar(char * add){
+    struct str * st = createStr();
+    addChrArrStr(add,st);
+    return  st ;
 
+}
 void deleteLastStr(struct str *  st ){
 
     deleteLastVector(st->vec);
@@ -79,15 +85,13 @@ size_t  findStrIndex(struct str *  st,char * search ){
 }
 
 struct vector *  split(struct str *  st , char d ){
-    struct str * deli = createStr();
-    char d2[2] =" ";
-    d2[0]=d;
+
+    const char d2[2] ={d,0};
     struct vector * res = createVector(sizeof(struct str));
-    struct str * cloned = clone(st);
+    struct str * cloned = createStrChar(st->vec->arr);
     char * token = strtok(cloned->vec->arr,d2);
     while(token){
-        struct str * cr = createStr();
-        addChrArrStr(token,cr);
+        struct str * cr = createStrChar(token);
         addVector(cr,res);
         token=strtok(NULL,d2);
     }
@@ -95,8 +99,7 @@ struct vector *  split(struct str *  st , char d ){
 }
 
 void catStr(struct str *  dest,struct str *  src){
-    setIndexVector(dest->vec->len-1 , src->vec->arr , dest->vec);
-    addNVector(src->vec->arr+sizeof(char),src->vec->len-1,dest->vec);
+    addChrArrStr(src->vec->arr , dest );
 }
 
 struct str * join(struct vector * arr , char d ){
@@ -111,5 +114,10 @@ struct str * join(struct vector * arr , char d ){
 
 
 }
-
+struct str * clone(struct str *  st){
+    return createStrChar(st->vec->arr);
+}
+void freeStr(struct str * st){
+    freeVector(st->vec);
+}
 #endif //IDSH_STR_H
