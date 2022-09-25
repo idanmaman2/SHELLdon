@@ -19,14 +19,10 @@ struct trieNode{
     struct trieNode * next[26];
 };
 
-
-
 struct trie{
     struct trieNode root;
     int size ;
 };
-
-
 
 
 //functions
@@ -36,10 +32,12 @@ struct linkedNode * createTrieNode(void * data,int size){
     return newHead;
 
 }
+
 static int convertToIndex(char ch){
     return ch-'a';
 
 }
+
 static int nodeExsistChar(char ck , struct trieNode * nd){
     return nd->next[convertToIndex(ck)] ;
 }
@@ -49,14 +47,12 @@ void putDataInTrieNode(struct trieNode * nd , int size , void * data){
     memcpy(nd->end,data,size);
 }
 
-
 struct trie *  createTrie(size_t size ){
     struct trie *  stk = (struct trie * )malloc(sizeof (struct trie));
     memset(stk,0,sizeof(struct trie));
     stk->size = size ;
     return stk ;
 }
-
 
 void addWord (struct trie * nd , char * word , void * data ){
     int wordLen = strlen(word);
@@ -77,10 +73,10 @@ static void * searchForValueRec(struct trieNode * nd , char * word){
         return searchForValueRec(nd->next[convertToIndex(*word)],word+1);
     return nd->end;
 }
+
 void *  searchForvalue(struct trie * nd , char * word ){
     return searchForValueRec(&nd->root,word);
 }
-
 
 static void forEachRec(void (*callback)(void * key , void * data , size_t keyLen),struct trieNode * node,struct vector * untilNow){
     char value ;
@@ -107,8 +103,6 @@ void forEachTrie(void (*callback)(void * ), struct trie * nd ){
 
 
 }
-
-
 
 
 #endif //IDSH_TRIE_H

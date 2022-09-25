@@ -6,6 +6,7 @@
 #define IDSH_STR_H
 
 #include "vector.h"
+
 char end = 0 ;
 struct str {
     struct iter  it ;
@@ -110,12 +111,5 @@ struct str * join(struct vector * arr , char d ){
 
 
 }
-
-
-
-
-
-
-
 
 #endif //IDSH_STR_H

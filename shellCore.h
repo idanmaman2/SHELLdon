@@ -125,7 +125,7 @@ void allCommands( ){
         allCommandsP(dataV->arr,out);
     }
 
-    forEach(printPath,out);
+    forEachIter(printPath,out,NULL);
 
 
 

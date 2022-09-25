@@ -110,6 +110,4 @@ void * popBack(struct linkedList * ln){
 
 }
 
-
-
 #endif //IDSH_STACK_H

@@ -10,7 +10,6 @@
 #include "DataStructers/linkedList.h"
 #include <unistd.h>
 #include <termios.h>
-
 #define BLINK 5
 #define BGWHITE 7
 #define BGRED 41
@@ -33,11 +32,6 @@
 #define CYAN 36
 #define WHITE 37
 #define DEFAULTCOLOR 39
-
-
-
-
-
 typedef struct command {
     int color ;
     char * command ;
@@ -49,8 +43,6 @@ u_int8_t getNextBG(){
     currentBGColor = (currentBGColor+1)%6 + 41 ;
     return  currentBGColor;
 }
-
-
 
 void changeColor(int color ) {
     printf("\033[0;%dm",color);
@@ -69,8 +61,6 @@ int getch() {
     return ch;
 }
 
-
-
 void clean(void * arg){
     printf("\b");
     printf(" ");
@@ -79,7 +69,6 @@ void clean(void * arg){
 
 }
 
-
 void printnf(size_t n , char * string , int colorC){
     changeColor(colorC);
     for(size_t i =0 ; i< n ; i++)
@@ -87,7 +76,6 @@ void printnf(size_t n , char * string , int colorC){
     changeColor(DEFAULTCOLOR);
     fflush(stdout);
 }
-
 
 char *  input (void (* callbackPrint) () )
 {
@@ -128,7 +116,7 @@ char *  input (void (* callbackPrint) () )
 
             }
             deleteLastVector(beforeSpace);
-            forEach(clean,beforeSpace);
+            forEachIter(clean,beforeSpace,NULL);
             printnf(beforeSpace->len,beforeSpace->arr , color);
             resetVector(beforeSpace);
 
@@ -149,7 +137,5 @@ char *  input (void (* callbackPrint) () )
     memset(vec->arr + (vec->len-1) * vec->size, 0 , vec->size);
     return  vec->arr;
 }
-
-
 
 #endif //IDSH_SHELLPRINTING_H

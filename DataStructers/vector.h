@@ -36,7 +36,6 @@ void iterResetVec(int * current,struct vector * ln){
     *current = 0 ;
 }
 
-
 //functions
 struct vector * createVector(int size ){
     struct vector * vec = (struct vector * )calloc(1,sizeof(struct vector));

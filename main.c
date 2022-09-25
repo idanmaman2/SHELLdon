@@ -8,6 +8,7 @@
 char * username ;
 char * homedir ;
 struct trie * myCommnads;
+
 void * printSchemeToscreen(){
     changeColor(YELLOW);
     printf("(%s)",username);
@@ -45,7 +46,8 @@ int main() {
     addChrArrStr("cool bruhhh",st);
     addChrStr("coooooollll",st);
     forEachIter(printChar , st ,NULL);
-
-
+    forEachIter(printChar , st ,NULL);
+    forEachIter(printChar , st ,NULL);
+    printf(st->vec->arr);
     return 0;
 }
