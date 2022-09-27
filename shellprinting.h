@@ -9,6 +9,7 @@
 #include "DataStructers/vector.h"
 #include "DataStructers/linkedList.h"
 #include "DataStructers/trie.h"
+#include "DataStructers/str.h"
 #include <unistd.h>
 
 #include <termios.h>
@@ -94,18 +95,7 @@ char *  input (void (* callbackPrint) () , struct trie * tr )
 {
     struct vector * vec = createVector(sizeof(char));
     char current;
-    char end = 0 ;
-    struct  vector * beforeSpace = createVector(sizeof(char));
-    struct vector * commands = createVector(sizeof(struct command));
-    struct  command com ;
-    struct linkedList * rBracket = createLinkedList(sizeof(u_int8_t));
-    com.command = "ls\0";
-    com.color = GREEN ;
-    addVector( &com,commands );
-    struct  command com2 ;
-    com2.command = "echo\0";
-    com2.color = RED ;
-    addVector( &com2,commands );
+    struct str * beforeSpace = createStr();
     do
     {
         current= getch();
@@ -117,22 +107,21 @@ char *  input (void (* callbackPrint) () , struct trie * tr )
             continue;
         }
 
-        if(current == ' ' && beforeSpace->len > 0 ){
+        if(current == ' ' && beforeSpace->vec->len -1  > 0 ){
             int  color  = DEFAULTCOLOR ;
-            addVector(&end,beforeSpace);
-            struct command_shell * com = searchForvalue(tr,beforeSpace);
-            if(com != NULL){
-              color = com->colorShowHead;
+            struct command_shell * com = searchForvalue(tr,beforeSpace->vec->arr);
+            if(com){
+              color = com->colorShowTail;
             }
-            deleteLastVector(beforeSpace);
             forEachIter(clean,beforeSpace,NULL);
-            printnf(beforeSpace->len,beforeSpace->arr , color);
-            resetVector(beforeSpace);
+            printnf(beforeSpace->vec->len , beforeSpace->vec->arr,color);
+            freeStr(beforeSpace);
+            beforeSpace=createStr();
 
         }
         else{
             if(beforeSpace > 0 )
-                addVector(&current,beforeSpace);
+                addChrStr(current,beforeSpace);
         }
 
 

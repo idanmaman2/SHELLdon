@@ -10,9 +10,9 @@
 #include "vector.h"
 
 
-const char chars[] ={'!','"','#','$','%','&',39,'(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','\\',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~'};
-#define charsLen 94
-
+const char chars[] ={" ",'!','"','#','$','%','&',39,'(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','\\',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~'};
+#define charsLen 95
+#define firstOrd 32
 
 struct trieNode{
     void * end ;
@@ -26,15 +26,14 @@ struct trie{
 
 
 //functions
-struct linkedNode * createTrieNode(void * data,int size){
-    struct trieNode  * newHead = (struct trieNode * )malloc(sizeof(struct trieNode));
-    memset(newHead,0,sizeof(struct trieNode));
+struct linkedNode * createTrieNode(){
+    struct trieNode  * newHead = (struct trieNode * )calloc(1,sizeof(struct trieNode));
     return newHead;
 
 }
 
 static int convertToIndex(char ch){
-    return ch-33;
+    return ch-firstOrd;
 
 
 }
@@ -59,18 +58,18 @@ void addWord (struct trie * nd , char * word , void * data ){
     int wordLen = strlen(word);
     struct trieNode * start = &nd->root;
     for(int i=0 ;i<wordLen;i++){
-        int index =convertToIndex(word[i]);
-        if(!start->next[index])
-            start->next[index] = malloc(sizeof(struct trieNode));
-        start = start->next[convertToIndex(word[i])];
+        size_t index  = convertToIndex(word[i]);
+        if(!nodeExsistChar(word[i],start))
+            start->next[index] = createTrieNode();
+        start = start->next[index];
     }
     putDataInTrieNode(start,nd->size , data);
 }
 
 static void * searchForValueRec(struct trieNode * nd , char * word){
-    if (word && !nd)
+    if (!nd)
         return NULL;
-    if( *word)
+    if(*word)
         return searchForValueRec(nd->next[convertToIndex(*word)],word+1);
     return nd->end;
 }
@@ -85,7 +84,7 @@ static void forEachRec(void (*callback)(void * key , void * data , size_t keyLen
     if(node->end) {
         callback(untilNow->arr, node->end, untilNow->len-1);
     }
-    for(size_t  i=0 ,value = 33 ; i< charsLen ; i++,value++){
+    for(size_t  i=0 ,value = firstOrd ; i< charsLen ; i++,value++){
         if(nodeExsistChar(value,node)){
             setIndexVector(untilNow->len-1,&value,untilNow);
             forEachRec(callback,node->next[convertToIndex(value)],untilNow);

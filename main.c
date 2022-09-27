@@ -34,7 +34,7 @@ void printChar( char * ch ){
 
 void printAll(void * key , void  * data, size_t len ){
    struct command_shell * tmp = data;
-   printf("\ntype : %d color : %d , basePath: %s \n" ,tmp->type ,tmp->colorShowHead , ((char * ) tmp->basePath) );
+   printf("\ntype : %d color : %d , basePath: %s \n" ,tmp->type ,tmp->colorShowHead , ((char * ) tmp->basePath->vec->arr) );
    for(size_t i =0 ; i<len ;i++){
        printf(" %c ",((char *)key)[i]);
    }
@@ -48,6 +48,7 @@ void prt(char * key , void * x, int size){
     for(int i=0;i<size;i++){
         printf("%c",key[i]);
     }
+    printf("\n");
 }
 
 
@@ -64,7 +65,8 @@ int main() {
     int x = 3;
     struct trie * tr = createTrie(sizeof(struct command_shell));
     forEachIter(addToTrie,allCommands(),tr);
-    forEachTrie(prt,tr);
+    forEachTrie(printAll,tr);
+    printAll("ls" , searchForvalue(tr,"ls"), NULL);
 
 
 
