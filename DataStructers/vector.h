@@ -9,7 +9,7 @@
 #ifndef UNTITLED1_VECTOR_H
 #define UNTITLED1_VECTOR_H
 
-typedef  struct vector
+struct vector
 {
     struct iter  it ;
     void  * arr;
@@ -20,6 +20,8 @@ typedef  struct vector
 //iter
 
 void * getIndexVector(size_t index , struct vector * vec){
+    if(index >= vec->len)
+        return  NULL ;
     return vec->arr + vec->size * index  ;
 }
 
@@ -82,7 +84,7 @@ int deleteVector(void * content  ,struct vector * vec ){
     return deleteIndexVector(searchVector(content,vec),vec);
 }
 
-void * deleteLastVector(struct vector * vec){
+void  deleteLastVector(struct vector * vec){
     deleteIndexVector(vec->len - 1 , vec ) ;
 
 }
@@ -119,6 +121,7 @@ struct vector * cloneVector (struct vector * vec){
     memcpy(vecClone->arr,vec->arr,vec->size*vec->len);
     vecClone->len=vec->len;
     vecClone->size=vec->size;
+    return vecClone;
 }
 
 void addNVector(void * array , size_t len , struct vector * vec){

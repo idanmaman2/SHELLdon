@@ -10,13 +10,13 @@
 #include <stdlib.h>
 #include "iter.h"
 
-typedef  struct linkedNode {
+struct linkedNode {
     struct  linkedNode * next ;
     struct  linkedNode * before ;
     void * content ;
 };
 
-typedef struct linkedList {
+struct linkedList {
     struct iter it ;
     size_t len ;
     unsigned int size  ;
@@ -96,14 +96,14 @@ void *  getBack(struct linkedList * ln ){
     return ln->tail->content;
 }
 
-void * popFront(struct linkedList * ln){
+void popFront(struct linkedList * ln){
     struct linkedNode * toDel = ln->head;
     ln->head=ln->head->next;
     freeNode(toDel);
 
 }
 
-void * popBack(struct linkedList * ln){
+void popBack(struct linkedList * ln){
     struct linkedNode * toDel = ln->tail;
     ln->tail=ln->tail->before;
     ln->tail->next=NULL;

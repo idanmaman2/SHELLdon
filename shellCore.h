@@ -94,7 +94,7 @@ void printPath(void * data , int * arg ){
     changeColor(dataV->def);
     printf("%d . path : ",*arg) ;
     changeColor(dataV->colorShowHead);
-    printf(dataV->name->vec->arr );
+    puts(dataV->name->vec->arr );
     changeColor(dataV->def);
     printf(" name :  ") ;
     changeColor(dataV->colorShowTail);

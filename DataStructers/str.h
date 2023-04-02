@@ -47,6 +47,16 @@ struct str *  createStr(){
 }
 
 
+
+size_t lengthStr(struct str * st){
+    return st->vec->len-1 ;
+}
+
+char getIndexStr(size_t index , struct str * st){
+    return *((char * )getIndexVector(index , st->vec));
+}
+
+
 char getLastStr(struct  str * st){
     return *((char * ) getIndexVector(st->vec->len-2 , st->vec));
 }
@@ -101,6 +111,18 @@ struct vector *  split(struct str *  st , char d ){
 void catStr(struct str *  dest,struct str *  src){
     addChrArrStr(src->vec->arr , dest );
 }
+
+
+
+struct str * subStr(size_t start , size_t end , struct str * st){
+    struct str * stSub = createStr() ;
+    for(size_t i=start ; i<=end ; i++){
+        addChrStr(getIndexStr(i,st) , stSub);
+    }
+    return stSub ;
+}
+
+
 
 struct str * join(struct vector * arr , char d ){
     struct str * jon = createStr();

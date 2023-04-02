@@ -3,6 +3,8 @@
 #include "shellprinting.h"
 #include "DataStructers/linkedList.h"
 #include "shellCore.h"
+#include "tokenizer.h"
+
 #define true 1
 #define INT_MAX 2147483647
 char * username ;
@@ -51,7 +53,14 @@ void prt(char * key , void * x, int size){
     printf("\n");
 }
 
+void printTokenShell(struct TokenShell * tok , struct str * st){
+    printf("\ntoken : %d %d %d \n" , tok->start , tok->end , tok->type   );
+    printnf(tok->end - tok->start + 1 , getIndexVector(tok->start , st->vec) , YELLOW);
+    putchar("\n");
+    putchar("\n");
 
+
+}
 int main() {
 
 
@@ -67,14 +76,11 @@ int main() {
     forEachIter(addToTrie,allCommands(),tr);
     forEachTrie(printAll,tr);
     printAll("ls" , searchForvalue(tr,"ls"), NULL);
-
-
-
-
-
     while(true ){
       printSchemeToscreen();
-      struct str  * input2 = createStrChar(input(printSchemeToscreen,tr));
+      struct str  * input2 = inputv2(printSchemeToscreen,tr);;
+        forEachIter(printTokenShell ,  tokenizer(input2) , input2) ;
+        putchar('\n');
       struct vector * sp = split(input2,' ');
       char * * arr = malloc(sp->len * sizeof(char * )+1);
       arr[sp->len] = NULL ;
