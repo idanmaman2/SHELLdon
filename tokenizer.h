@@ -46,8 +46,13 @@ struct vector *  tokenizer(struct str * command_raw){
         char chCurrent = getIndexStr(i , command_raw) ;
         switch (chCurrent) {
             case ' ':
-                if (series != None || start == i)
+                if (series != None || start == i ) {
+                    if(start == i){
+                        series = space ;
+                        start= i+1 ;
+                    }
                     continue;
+                }
                 // if it is None - means we are not in string ...
                 char typeofToken = command ;
                 struct TokenShell * lastToken = getLastVector(tokens);
